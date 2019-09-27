@@ -1,8 +1,8 @@
 open ReactLib;
 
-type state = string;
+type state = Hooks.State.t(string) => Hooks.nil;
 
-type t('c) = (state, React.noAction) => Div.t('c);
+type t('c) = (state) => Div.t('c);
 
 let oneJsx = <Div />;
 
@@ -144,11 +144,10 @@ let render:
   (
     ~txt="deafult",
     children: React.elem('childrenTree),
-    ~state=txt,
-    self: React.self(t('childrenTree)),
-  ) =>
-    React.Reducer(
-      state,
+  ) => Stateful(hooks => {
+    let (_, _, hooks) = Hooks.state(txt, hooks);
+    (
+      hooks,
       <> <Div className="childContainer"> children </Div> </>,
-      React.nonReducer,
-    );
+    )
+  });

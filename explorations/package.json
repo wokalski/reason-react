@@ -1,13 +1,9 @@
-
 {
   "name": "static-react",
   "version": "0.0.1",
   "dependencies": {
     "@opam/ocaml-migrate-parsetree": "*",
-    "@esy-ocaml/esy-installer": "^0.0.0",
-    "@esy-ocaml/substs": "^0.0.1",
-    "@opam/ocamlfind": "",
-    "@esy-ocaml/reason": "^3.0.0",
+    "@opam/reason": "let-def/reason:reason.opam#636324f",
     "refmterr": "*",
     "dune": "*"
   },
@@ -15,17 +11,13 @@
     "build": [
       [ "refmterr", "jbuilder", "build", "./bin/react-app/Main.exe"],
       [ "refmterr", "jbuilder", "build", "@install"]
-    ],
-    "install": [
-      "esy-installer"
-    ],
-    "buildsInSource": "_build"
+    ]
   },
   "peerDependencies": {
-    "ocaml": "~4.6.0"
+    "ocaml": "~4.7.0"
   },
   "devDependencies": {
-    "@opam/merlin": "*",
-    "ocaml": "~4.6.0"
+    "@opam/merlin-lsp": "ocaml/merlin:merlin-lsp.opam#1ef30fb",
+    "ocaml": "~4.7.0"
   }
 }

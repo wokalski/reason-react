@@ -1,17 +1,15 @@
 open ReactLib;
 
-type state = string;
-
-type action =
-  | TextChanged(string);
+type state = Hooks.State.t(string) => Hooks.nil;
 
 type renderedTree = Div.t(React.empty);
 
-type t = (state, action) => renderedTree;
+type t = state => renderedTree;
 
-let render = (~init="deafult", children, ~state=init, self) =>
-  React.Reducer(
-    state,
-    <> <Div className="divRenderedByInput" /> </>,
-    (_, TextChanged(s)) => state,
+let render = (~init="deafult", children) =>
+  React.Stateful(
+    hooks => {
+      let (_, _, hooks) = Hooks.state(init, hooks);
+      (hooks, <> <Div className="divRenderedByInput" /> </>);
+    },
   );

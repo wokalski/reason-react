@@ -2,7 +2,7 @@ type state = string;
 
 type event;
 
-type t('renderedTree) = (state, React.noAction) => 'renderedTree;
+type t('renderedTree) = Hooks.nil => 'renderedTree;
 
 let render:
   (
@@ -11,6 +11,6 @@ let render:
     ~className: string=?,
     React.elem('renderedTree)
   ) =>
-  React.renderable(t('renderedTree));
+  React.stateless('renderedTree);
 
 let domStateToString: state => string;
