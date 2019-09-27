@@ -1,5 +1,6 @@
 let suppress = {contents: false};
 
+
 let rec printInstanceCollection:
   type t. (~s: string=?, React.subtree(t)) => string =
   (~s="", subtree) => {
@@ -24,16 +25,16 @@ let rec printInstanceCollection:
         "InstanceMap("
         ++ String.concat(
              ",",
-             List.map(printInstanceCollection(~s=dNext), lst),
+             List.map(printInstanceCollection(~s=dNext), lst.toList()),
            )
         ++ ")"
       }
     );
   }
-and printInstance:
-  type s a sub. (~s: string=?, React.inst((s, a) => sub)) => string =
+
+and printInstance: type s sub. (~s: string=?, React.inst(s => sub)) => string =
   (~s="", n) => {
-    let React.Reducer(state, subelems, reducer) = n.spec;
+    let state = Hooks.printState(Some(n.hooks));
     let state: Obj.t = Obj.magic(state);
     React.(
       "{\n"
@@ -67,7 +68,7 @@ let printSection = s =>
     print_endline("\n\n" ++ s);
   };
 
-let printRoot: type s a sub. (string, Root.t((s, a) => sub)) => unit =
+let printRoot: type s a sub. (string, Root.t(s => sub)) => unit =
   (title, root) =>
     switch (suppress.contents, root.elemsAndInstance) {
     | (false, None) =>

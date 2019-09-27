@@ -76,6 +76,7 @@ for (i in 0 to 0) {
   ReactPrint.printRoot("Init:", appRoot);
   Root.render(appRoot, <InputController shouldControlInput=true />);
   ReactPrint.printRoot("Update:", appRoot);
+  /*
   ReactPrint.printSection(
     "\n\n------------------------------\nApp With Request Animation Frame \n----------------------",
   );
@@ -88,6 +89,7 @@ for (i in 0 to 0) {
   ReactPrint.printRoot("Update After raf tick:", animRoot);
   /* Clear this otherwise they'll show up in next loop iteration */
   RequestAnimationFrame.clearAll();
+  */
   ReactPrint.printSection(
     "\n\n------------------------------\nApp With Polymoprhic State \n----------------------------",
   );

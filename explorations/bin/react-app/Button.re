@@ -2,18 +2,19 @@ open ReactLib;
 
 open React;
 
-type state = string;
+type state = Hooks.State.t(string) => Hooks.nil;
 
 type action =
   | Click;
 
 type renderedTree = Div.t(React.empty);
 
-type t = (state, React.noAction) => renderedTree;
+type t = state => renderedTree;
 
-let render = (~txt="default", ~size: int, children, ~state=txt, self) =>
-  React.Reducer(
-    state,
-    <> <Div className="buttonClass" /> </>,
-    React.nonReducer,
+let render = (~txt="default", ~size: int, children): React.renderable(t) =>
+  Stateful(
+    hooks => {
+      let (txt, _, hooks) = Hooks.state(txt, hooks);
+      (hooks, <> <Div className="buttonClass" /> </>);
+    },
   );

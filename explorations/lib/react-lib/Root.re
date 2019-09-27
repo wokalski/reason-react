@@ -41,7 +41,7 @@ let render = (root, elems: React.elem('s => 'sub)) =>
     let (curElems, curSubtree) = ei;
     let nextEi = (
       elems,
-      React.reconcileSubtree(curSubtree, curElems, elems),
+      React.reconcileSubtree(root.replacer, curSubtree, curElems, elems),
     );
     root.elemsAndInstance = Some(nextEi);
   };

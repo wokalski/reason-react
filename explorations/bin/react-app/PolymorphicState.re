@@ -19,6 +19,10 @@ type sub = Div.t(React.empty);
 
 type t('x) = state('x) => sub;
 
-let render =
-    (~anyProp, ~size: string, children, ~state=(anyProp, anyProp), self) =>
-  React.Reducer(state, <Div className=size />, (_, action) => state);
+let render = (~anyProp, ~size: string, children) =>
+  React.Stateful(
+    hooks => {
+      let (state, _, hooks) = Hooks.state((anyProp, anyProp), hooks);
+      (hooks, <Div className=size />);
+    },
+  );

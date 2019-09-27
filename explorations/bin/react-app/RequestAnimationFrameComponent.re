@@ -1,3 +1,4 @@
+/*
 /**
  * Demonstrates subscribing to external sources and how the
  * self.handler will allow updating in your tree, in an imperative,
@@ -26,28 +27,39 @@ let (|?) = (x, getDefault) =>
 /* This is the dummy built in event type, will be customizable later. */
 let onRaf = e => Tick;
 
-let initialStateGetter = (self, ()) => {
-  let _ = RequestAnimationFrame.request(self.reduceEvent(onRaf));
+let initialStateGetter = (send, ()) => {
+  let _ = RequestAnimationFrame.request(() => send(onRaf));
   "initialAnimationFrameSetup";
 };
 
-let render = (~txt="default", children, ~state=?, self) => {
-  let state = state |? initialStateGetter(self);
-  Reducer(
-    state,
-    <>
-      <Div className="rafFirstDiv" />
-      <Div className="rafSecond">
-        <Div className=("rafDeepDiv" ++ string_of_int(Random.int(10))) />
-      </Div>
-    </>,
-    (inst, action) => {
-      /* Reason knows this is a div instance because you used div JSX!!! */
-      /* The shape of instances reflects the shape of the JSX */
-      let TwoInstances(_, Instance({subtree: Instance(d)})) = inst.subtree;
-      let divStateStr = Div.domStateToString(React.stateOf(d));
-      ignore(RequestAnimationFrame.request(self.reduceEvent(onRaf)));
-      state ++ "->animFiredWithDeepDivState(" ++ divStateStr ++ ")";
+let render = (~txt="default", children) =>
+  Stateful(
+    hooks => {
+      let (state, _, hooks) = Hooks.state(None, hooks);
+      let (send, hooks) =
+        React.eventHook(
+          (action, send, inst) => {
+            /* Reason knows this is a div instance because you used div JSX!!! */
+            /* The shape of instances reflects the shape of the JSX */
+            let TwoInstances(_, Instance({subtree: Instance(d)})) =
+              inst.subtree;
+            let (state, _) = Hooks.dropFirst(React.stateOf(d));
+            let divStateStr = Div.domStateToString(state);
+            ignore(RequestAnimationFrame.request(send(onRaf)));
+            txt ++ "->animFiredWithDeepDivState(" ++ divStateStr ++ ")";
+          },
+          hooks,
+        );
+      let _ = state |? initialStateGetter(send);
+      (
+        hooks,
+        <>
+          <Div className="rafFirstDiv" />
+          <Div className="rafSecond">
+            <Div className={"rafDeepDiv" ++ string_of_int(Random.int(10))} />
+          </Div>
+        </>,
+      );
     },
   );
-};
+*/

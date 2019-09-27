@@ -10,13 +10,12 @@ open ReactLib;
  * Input's state is not abstract. It admits its state, and is therefore
  * controllable.
  */
-type state = string;
-
-type action;
+type state = Hooks.State.t(string) => Hooks.nil;
 
 type renderedTree;
 
-type t = (state, action) => renderedTree;
+type t = state => renderedTree;
 
 let render:
-  (~init: string=?, React.elem(React.empty)) => React.renderable(t);
+  (~init: string=?, React.elem(React.empty)) =>
+  React.renderable(t);
